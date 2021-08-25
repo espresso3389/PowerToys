@@ -1,0 +1,9 @@
+namespace PowerRenameUI_new
+{
+    [default_interface]
+    runtimeclass MainWindow : Windows.UI.Xaml.Controls.UserControl
+    {
+        MainWindow();
+        Int32 MyProperty;
+    }
+}
