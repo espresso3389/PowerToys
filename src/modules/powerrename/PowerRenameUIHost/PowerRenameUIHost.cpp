@@ -2,222 +2,146 @@
 //
 #include "pch.h"
 
+#include "XamlBridge.h"
+
 #include "framework.h"
 #include "PowerRenameUIHost.h"
 
 #define MAX_LOADSTRING 100
 
-// Global Variables:
-HINSTANCE hInst;                                // current instance
-WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
-WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
-winrt::PowerRenameUI_new::App hostApp{ nullptr };
-winrt::Windows::UI::Xaml::Hosting::DesktopWindowXamlSource _desktopWindowXamlSource{ nullptr };
-winrt::PowerRenameUI_new::MainWindow _myUserControl{ nullptr };
+const wchar_t c_WindowClass[] = L"PowerRename";
 
-// Forward declarations of functions included in this code module:
-ATOM                MyRegisterClass(HINSTANCE hInstance);
-BOOL                InitInstance(HINSTANCE, int);
-LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-void AdjustLayout(HWND);
+class AppWindow : public DesktopWindowT<AppWindow>
+{
+public:
+    static int Show(HINSTANCE hInstance, int nCmdShow)
+    {
+        auto window = AppWindow(hInstance);
+        window.CreateAndShowWindow(nCmdShow);
+        return window.MessageLoop(window.m_accelerators.get());
+    }
+
+    LRESULT MessageHandler(UINT message, WPARAM wParam, LPARAM lParam) noexcept
+    {
+        switch (message)
+        {
+            HANDLE_MSG(WindowHandle(), WM_CREATE, OnCreate);
+            HANDLE_MSG(WindowHandle(), WM_COMMAND, OnCommand);
+            HANDLE_MSG(WindowHandle(), WM_DESTROY, OnDestroy);
+            HANDLE_MSG(WindowHandle(), WM_SIZE, OnResize);
+        default:
+            return base_type::MessageHandler(message, wParam, lParam);
+        }
+
+        return base_type::MessageHandler(message, wParam, lParam);
+    }
+
+private:
+    AppWindow(HINSTANCE hInstance) noexcept :
+        m_instance(hInstance)
+    {
+    }
+
+    void CreateAndShowWindow(int nCmdShow)
+    {
+        m_accelerators.reset(LoadAcceleratorsW(m_instance, MAKEINTRESOURCE(IDC_POWERRENAMEUIHOST)));
+
+        WNDCLASSEXW wcex = { sizeof(wcex) };
+        wcex.style = CS_HREDRAW | CS_VREDRAW;
+        wcex.lpfnWndProc = WndProc;
+        wcex.hInstance = m_instance;
+        wcex.hIcon = LoadIconW(m_instance, MAKEINTRESOURCE(IDC_POWERRENAMEUIHOST));
+        wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+        wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
+        wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_POWERRENAMEUIHOST);
+        wcex.lpszClassName = c_WindowClass;
+        wcex.hIconSm = LoadIconW(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+        RegisterClassExW(&wcex); // don't test result, handle error at CreateWindow
+
+        wchar_t title[64];
+        LoadStringW(m_instance, IDS_APP_TITLE, title, ARRAYSIZE(title));
+
+        HWND window = CreateWindowW(c_WindowClass, title, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, CW_USEDEFAULT, nullptr, nullptr, m_instance, this);
+        THROW_LAST_ERROR_IF(!window);
+
+        ShowWindow(window, nCmdShow);
+        UpdateWindow(window);
+        SetFocus(window);
+    }
+
+    bool OnCreate(HWND, LPCREATESTRUCT) noexcept
+    {
+        m_mainUserControl = winrt::PowerRenameUI_new::MainWindow();
+        m_xamlIsland = CreateDesktopWindowsXamlSource(WS_TABSTOP, m_mainUserControl);
+
+        return true;
+    }
+
+    void OnCommand(HWND, int id, HWND hwndCtl, UINT codeNotify) noexcept
+    {
+        switch (id)
+        {
+        case IDM_ABOUT:
+            DialogBoxW(m_instance, MAKEINTRESOURCE(IDD_ABOUTBOX), WindowHandle(), [](HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) -> INT_PTR {
+                switch (message)
+                {
+                case WM_INITDIALOG:
+                    return TRUE;
+
+                case WM_COMMAND:
+                    if ((LOWORD(wParam) == IDOK) || (LOWORD(wParam) == IDCANCEL))
+                    {
+                        EndDialog(hDlg, LOWORD(wParam));
+                        return TRUE;
+                    }
+                    break;
+                }
+                return FALSE;
+            });
+            break;
+
+        case IDM_EXIT:
+            PostQuitMessage(0);
+            break;
+        }
+    }
+
+    void OnDestroy(HWND hwnd) noexcept
+    {
+        //m_buttonClickRevoker.revoke();
+        base_type::OnDestroy(hwnd);
+    }
+
+    void OnResize(HWND, UINT state, int cx, int cy) noexcept
+    {
+        const auto newHeight = cy;
+        const auto newWidth = cx;
+        const auto islandHeight = newHeight - (50 * 2) - 10;
+        const auto islandWidth = newWidth - (10 * 2);
+        //SetWindowPos(m_button1.get(), 0, ButtonWidth * 2, ButtonMargin, ButtonWidth, ButtonHeight, SWP_SHOWWINDOW);
+        //SetWindowPos(m_xamlButton1, m_button1.get(), newWidth - (ButtonWidth * 2), ButtonMargin, ButtonWidth, ButtonHeight, SWP_SHOWWINDOW);
+        SetWindowPos(m_xamlIsland, NULL, 0, 60, islandWidth, islandHeight, SWP_SHOWWINDOW);
+        //SetWindowPos(m_button2.get(), m_xamlIsland, (ButtonMargin + newWidth - ButtonWidth) / 2, newHeight - ButtonMargin - ButtonHeight, ButtonWidth, ButtonHeight, SWP_SHOWWINDOW);
+    }
+
+    wil::unique_haccel m_accelerators;
+    const HINSTANCE m_instance;
+    HWND m_xamlIsland{};
+    winrt::PowerRenameUI_new::MainWindow m_mainUserControl{ nullptr };
+};
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
-
-    // TODO: Place code here.
     winrt::init_apartment(winrt::apartment_type::single_threaded);
-    hostApp = winrt::PowerRenameUI_new::App{};
-    _desktopWindowXamlSource = winrt::Windows::UI::Xaml::Hosting::DesktopWindowXamlSource{};
 
-    // Initialize global strings
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_POWERRENAMEUIHOST, szWindowClass, MAX_LOADSTRING);
-    MyRegisterClass(hInstance);
+    winrt::PowerRenameUI_new::App app;
 
-    // Perform application initialization:
-    if (!InitInstance (hInstance, nCmdShow))
-    {
-        return FALSE;
-    }
+    const auto result = AppWindow::Show(hInstance, nCmdShow);
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_POWERRENAMEUIHOST));
+    app.Close();
 
-    MSG msg;
-
-    // Main message loop:
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
-
-    return (int) msg.wParam;
-}
-
-
-
-//
-//  FUNCTION: MyRegisterClass()
-//
-//  PURPOSE: Registers the window class.
-//
-ATOM MyRegisterClass(HINSTANCE hInstance)
-{
-    WNDCLASSEXW wcex;
-
-    wcex.cbSize = sizeof(WNDCLASSEX);
-
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = WndProc;
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_POWERRENAMEUIHOST));
-    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_POWERRENAMEUIHOST);
-    wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-
-    return RegisterClassExW(&wcex);
-}
-
-//
-//   FUNCTION: InitInstance(HINSTANCE, int)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
-{
-    hInst = hInstance; // Store instance handle in our global variable
-
-    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
-
-    if (!hWnd)
-    {
-        return FALSE;
-    }
-
-    // Begin XAML Islands walkthrough code.
-    if (_desktopWindowXamlSource != nullptr)
-    {
-        auto interop = _desktopWindowXamlSource.as<IDesktopWindowXamlSourceNative>();
-        check_hresult(interop->AttachToWindow(hWnd));
-        HWND hWndXamlIsland = nullptr;
-        interop->get_WindowHandle(&hWndXamlIsland);
-        RECT windowRect;
-        ::GetWindowRect(hWnd, &windowRect);
-        ::SetWindowPos(hWndXamlIsland, NULL, 0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, SWP_SHOWWINDOW);
-        _myUserControl = winrt::PowerRenameUI_new::MainWindow();
-        _desktopWindowXamlSource.Content(_myUserControl);
-    }
-    // End XAML Islands walkthrough code.
-
-    ShowWindow(hWnd, nCmdShow);
-    UpdateWindow(hWnd);
-
-    return TRUE;
-}
-
-//
-//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE: Processes messages for the main window.
-//
-//  WM_COMMAND  - process the application menu
-//  WM_PAINT    - Paint the main window
-//  WM_DESTROY  - post a quit message and return
-//
-//
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch (message)
-    {
-    case WM_COMMAND:
-        {
-            int wmId = LOWORD(wParam);
-            // Parse the menu selections:
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
-        }
-        break;
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
-            EndPaint(hWnd, &ps);
-        }
-        break;
-      case WM_DESTROY:
-          PostQuitMessage(0);
-          if (_desktopWindowXamlSource != nullptr)
-          {
-              _desktopWindowXamlSource.Close();
-              _desktopWindowXamlSource = nullptr;
-          }
-          break;
-      case WM_SIZE:
-          AdjustLayout(hWnd);
-          break;
-        default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
-    }
-    return 0;
-}
-
-// Message handler for about box.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    UNREFERENCED_PARAMETER(lParam);
-    switch (message)
-    {
-    case WM_INITDIALOG:
-        return (INT_PTR)TRUE;
-
-    case WM_COMMAND:
-        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-        {
-            EndDialog(hDlg, LOWORD(wParam));
-            return (INT_PTR)TRUE;
-        }
-        break;
-    }
-    return (INT_PTR)FALSE;
-}
-
-void AdjustLayout(HWND hWnd)
-{
-    if (_desktopWindowXamlSource != nullptr)
-    {
-        auto interop = _desktopWindowXamlSource.as<IDesktopWindowXamlSourceNative>();
-        HWND xamlHostHwnd = NULL;
-        check_hresult(interop->get_WindowHandle(&xamlHostHwnd));
-        RECT windowRect;
-        ::GetWindowRect(hWnd, &windowRect);
-        ::SetWindowPos(xamlHostHwnd, NULL, 0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, SWP_SHOWWINDOW);
-    }
+    return result;
 }

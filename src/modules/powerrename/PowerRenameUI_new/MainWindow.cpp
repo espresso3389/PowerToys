@@ -26,6 +26,6 @@ namespace winrt::PowerRenameUI_new::implementation
 
     void MainWindow::ClickHandler(IInspectable const&, RoutedEventArgs const&)
     {
-        Button().Content(box_value(L"Clicked"));
+        //Button().Content(box_value(L"Clicked"));
     }
 }

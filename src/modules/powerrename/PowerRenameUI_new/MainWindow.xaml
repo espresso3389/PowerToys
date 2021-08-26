@@ -5,15 +5,206 @@
     xmlns:local="using:PowerRenameUI_new"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
 
-    <StackPanel HorizontalAlignment="Center" Spacing="10" 
-                Padding="20" VerticalAlignment="Center">
-        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" 
-                       Text="Hello from XAML Islands" FontSize="30" />
-        <TextBlock HorizontalAlignment="Center" Margin="15" TextWrapping="Wrap"
-                       Text="😍❤💋🌹🎉😎�🐱‍👤" FontSize="16" />
-        <Button HorizontalAlignment="Center" 
-                x:Name="Button" Click="ClickHandler">Click Me</Button>
-    </StackPanel>
+    <Grid Background="{StaticResource BackgroundAcrylicBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="86"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="64"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" x:Name="PreviewColumn"/>
+            <ColumnDefinition Width="360" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0"
+              Background="{ThemeResource SolidBackgroundColor}"
+              Grid.RowSpan="3"/>
+
+        <TextBlock Text="Preview"
+                   FontWeight="Bold"
+                   FontSize="16"
+                   Grid.Column="0"
+                   Style="{ThemeResource TitleTextBlockStyle}"
+                   VerticalAlignment="Center"
+                   Margin="12,36,0,0"/>
+
+        <TextBlock Text="Search criteria"
+                   FontWeight="Bold"
+                   FontSize="16"
+                   Grid.Column="1"
+                   Style="{ThemeResource TitleTextBlockStyle}"
+                   VerticalAlignment="Center"
+                   Margin="12,36,0,0" />
+        <Grid Background="{StaticResource SolidBackgroundColor}"
+              Grid.Row="3"
+              Grid.RowSpan="3"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Spacing="0" Margin="0,12,0,12">
+            <TextBox Header="Search for" Margin="12,0,12,0">
+                <ToolTipService.ToolTip>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="RegEx cheatsheet" FontWeight="SemiBold" />
+                        <!--<ListView ItemsSource="{x:Bind SearchRegExShortcuts}"
+                                          Grid.Row="1"
+                                          IsItemClickEnabled="True"
+                                          ItemClick="ListView_ItemClick"
+                                          Margin="-4,12,0,0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="local:RegExShortcut">
+                                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="-8,0,0,0">
+                                        <ToolkitControls:DropShadowPanel ShadowOpacity="0.2" OffsetX="0" OffsetY="1" BlurRadius="2">
+                                            <Border CornerRadius="2" Padding="8" Background="{ThemeResource SnippetBackgroundBrush}">
+                                                <TextBlock FontFamily="Consolas" Text="{x:Bind Code}"/>
+                                            </Border>
+                                        </ToolkitControls:DropShadowPanel>
+                                        <TextBlock Text="{x:Bind Description}" FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>-->
+                    </Grid>
+                </ToolTipService.ToolTip>
+            </TextBox>
+            <Grid Margin="12,12,12,0">
+
+                <TextBox x:Name="ReplaceWidthTextBox" Header="Replace with">
+                    <ToolTipService.ToolTip>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="28"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="File creation cheatsheet" FontWeight="SemiBold" />
+                            <!--<ListView ItemsSource="{x:Bind FileRegExShortcuts}"
+                                          Grid.Row="1"
+                                          IsItemClickEnabled="True"
+                                          ItemClick="ListView_ItemClick"
+                                          Margin="-4,12,0,0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="local:RegExShortcut">
+                                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="-8,0,0,0">
+                                            <ToolkitControls:DropShadowPanel ShadowOpacity="0.2" OffsetX="0" OffsetY="1" BlurRadius="2">
+                                                <Border CornerRadius="2" Padding="8" Background="{ThemeResource SnippetBackgroundBrush}">
+                                                    <TextBlock FontFamily="Consolas" Text="{x:Bind Code}"/>
+                                                </Border>
+                                            </ToolkitControls:DropShadowPanel>
+                                            <TextBlock Text="{x:Bind Description}" FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>-->
+                        </Grid>
+                    </ToolTipService.ToolTip>
+                </TextBox>
+            </Grid>
+            <ScrollViewer>
+
+            </ScrollViewer>
+            <controls:Expander Background="Transparent"
+                           Header="Search options" HorizontalContentAlignment="Stretch"
+                           IsExpanded="False"
+                           HorizontalAlignment="Stretch">
+                <StackPanel Margin="12,0,12,0" Orientation="Vertical">
+                    <CheckBox Content="Use regular expressions"/>
+                    <CheckBox Content="Case sensitive"/>
+                    <CheckBox Content="Item name only"/>
+                    <CheckBox Content="Item extension only" Margin="0,0,0,12"/>
+                </StackPanel>
+            </controls:Expander>
+
+            <controls:Expander Background="Transparent"
+                           Header="File exclusions" HorizontalContentAlignment="Stretch"
+                           IsExpanded="False"
+                           HorizontalAlignment="Stretch">
+                <StackPanel Margin="12,0,12,0" Orientation="Vertical">
+                    <CheckBox Content="Match all occurences"/>
+                    <CheckBox Content="Exclude files"/>
+                    <CheckBox Content="Exclude folders"/>
+                    <CheckBox Content="Exclude subfolder items" Margin="0,0,0,12"/>
+                </StackPanel>
+            </controls:Expander>
+            <controls:Expander Background="Transparent"
+                           Header="Output options" HorizontalContentAlignment="Stretch"
+                           IsExpanded="False"
+                           HorizontalAlignment="Stretch">
+                <StackPanel Margin="12,0,12,0" Orientation="Vertical">
+                    <CheckBox Content="Enumerate items"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0" Spacing="8">
+                        <TextBlock Text="Filename casing" Margin="0,4,12,0"/>
+                        <ToggleButton x:Name="UppercaseBtn" Background="Transparent" FontWeight="SemiLight" FontFamily="Consolas" Content="TT" Width="36" ToolTipService.ToolTip="Make uppercase"/>
+                        <ToggleButton x:Name="LowercaseBtn" Background="Transparent" FontWeight="SemiLight" FontFamily="Consolas" Content="tt" Width="36" ToolTipService.ToolTip="Make lowercase"/>
+                        <ToggleButton x:Name="TitlecaseBtn" Background="Transparent" FontWeight="SemiLight" FontFamily="Consolas" Content="Tt" Width="36" ToolTipService.ToolTip="Make titlecase"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </controls:Expander>
+
+        </StackPanel>
+        <Border CornerRadius="2"
+                Margin="12,34,12,12"
+                Grid.Row="1" Grid.RowSpan="2"
+                BorderBrush="{ThemeResource TextControlBorderBrush}"
+                BorderThickness="1">
+            <!--<ToolkitControls:DataGrid
+                x:Name="dataGrid"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                HorizontalScrollBarVisibility="Visible"
+                VerticalScrollBarVisibility="Visible"
+                AlternatingRowBackground="Transparent"
+                AlternatingRowForeground="Gray"
+                AreRowDetailsFrozen="False"
+                AreRowGroupHeadersFrozen="True"
+                AutoGenerateColumns="False"
+                CanUserSortColumns="False"
+                CanUserReorderColumns="True"
+                CanUserResizeColumns="True"
+                ColumnHeaderHeight="32"
+                MaxColumnWidth="400"
+                FrozenColumnCount="0"
+                GridLinesVisibility="None"
+                HeadersVisibility="Column"
+                IsReadOnly="True"
+                ItemsSource="{x:Bind FileNames}"
+                RowDetailsVisibilityMode="Collapsed"
+                SelectionMode="Single"
+                
+                RowGroupHeaderPropertyNameAlternative="Range">
+                <ToolkitControls:DataGrid.Columns>
+                    <ToolkitControls:DataGridCheckBoxColumn IsReadOnly="True" />
+                    <ToolkitControls:DataGridTextColumn Header="Original" IsReadOnly="True" Binding="{Binding Original}" Tag="Original" />
+                    <ToolkitControls:DataGridTextColumn Header="Renamed" IsReadOnly="True" Binding="{Binding Renamed}" Tag="Renamed" />
+                </ToolkitControls:DataGrid.Columns>
+            </ToolkitControls:DataGrid>-->
+        </Border>
+
+
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Spacing="12" Margin="12" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Button x:Name="SettingsBtn" Grid.Row="5" Background="Transparent" Grid.Column="1">
+                <Button.Content>
+                    <FontIcon Glyph="&#xE713;" />
+                </Button.Content>
+            </Button>
+            <Button Style="{StaticResource AccentButtonStyle}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE8AC;" FontSize="14" FontFamily="Segoe MDL2 Assets" />
+                        <TextBlock Text="Rename"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+
+        <StackPanel x:Name="TitleBar" Orientation="Horizontal">
+            <Image Source="Assets/PowerRename.png" Width="16" Height="16" VerticalAlignment="Top" Margin="11,9,0,0"/>
+            <TextBlock Text="PowerRename for Windows" FontSize="12" Margin="8,8,0,0" VerticalAlignment="Top" />
+        </StackPanel>
+    </Grid>
 </UserControl>
