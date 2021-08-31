@@ -5,8 +5,9 @@
 namespace winrt::PowerRenameUI_new::implementation
 {
     ExplorerItem::ExplorerItem(hstring const& original, int32_t type) :
-        m_original{ original }, m_type{ type }
+        m_original{ original }, m_renamed{ L"renamed_" + original }, m_type{ type }
     {
+        m_children = winrt::single_threaded_observable_vector<PowerRenameUI_new::ExplorerItem>();
     }
     
     hstring ExplorerItem::Original()

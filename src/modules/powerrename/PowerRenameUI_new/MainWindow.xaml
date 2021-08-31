@@ -12,23 +12,33 @@
         <DataTemplate x:Key="FolderTemplate" x:DataType="local:ExplorerItem">
             <controls:TreeViewItem
             ItemsSource="{x:Bind Children}" IsExpanded="True">
-                <StackPanel Orientation="Horizontal">
-                    <Image Width="20" Source="../Assets/folder.png"/>
-                    <TextBlock Margin="0,0,10,0"/>
-                    <TextBlock Text="{x:Bind Original}" />
-                    <TextBlock Text="{x:Bind Renamed}" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image Width="20" Source="../Assets/folder.png" Grid.Column="0"/>
+                    <TextBlock Text="{x:Bind Original}" Grid.Column="1"/>
+                    <TextBlock Text="{x:Bind Renamed, Mode=OneWay}" Grid.Column="2"/>
+                </Grid>
             </controls:TreeViewItem>
         </DataTemplate>
 
         <DataTemplate x:Key="FileTemplate" x:DataType="local:ExplorerItem">
             <controls:TreeViewItem>
-                <StackPanel Orientation="Horizontal">
-                    <Image Width="20" Source="../Assets/file.png"/>
-                    <TextBlock Margin="0,0,10,0"/>
-                    <TextBlock Text="{x:Bind Original}" />
-                    <TextBlock Text="{x:Bind Renamed}" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image Width="20" Source="../Assets/file.png" Grid.Column="0"/>
+                    <TextBlock Text="{x:Bind Original}" Grid.Column="1"/>
+                    <TextBlock Text="{x:Bind Renamed, Mode=OneWay}" Grid.Column="2"/>
+                </Grid>
             </controls:TreeViewItem>
         </DataTemplate>
 
@@ -180,9 +190,9 @@
                 Grid.Row="1" Grid.RowSpan="2"
                 BorderBrush="{ThemeResource TextControlBorderBrush}"
                 BorderThickness="1">
-            <controls:TreeView x:Name="FileTree" Grid.Column="2" MinWidth="345" MaxHeight="400" Margin="0,12,0,0"
-                            HorizontalAlignment="Center" VerticalAlignment="Top" ItemsSource="{x:Bind ExplorerItems}" 
-                            ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}"/>
+            <controls:TreeView x:Name="FileTree" Margin="0,12,0,0"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{x:Bind ExplorerItems}" 
+                            ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}" SelectionMode="Multiple"/>
         </Border>
 
 
@@ -192,7 +202,7 @@
                     <FontIcon Glyph="&#xE713;" />
                 </Button.Content>
             </Button>
-            <Button Style="{StaticResource AccentButtonStyle}">
+            <Button Style="{StaticResource AccentButtonStyle}" Click="Click_rename">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <FontIcon Glyph="&#xE8AC;" FontSize="14" FontFamily="Segoe MDL2 Assets" />

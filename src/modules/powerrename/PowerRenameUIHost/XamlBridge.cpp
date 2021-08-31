@@ -139,7 +139,7 @@ int DesktopWindow::MessageLoop(HACCEL accelerators)
     while (GetMessage(&msg, nullptr, 0, 0))
     {
         const bool processedMessage = FilterMessage(&msg);
-        if (!processedMessage)// && !TranslateAcceleratorW(msg.hwnd, accelerators, &msg))
+        if (!processedMessage && !TranslateAcceleratorW(msg.hwnd, accelerators, &msg))
         {
             if (!NavigateFocus(&msg))
             {

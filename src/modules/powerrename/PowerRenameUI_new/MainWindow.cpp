@@ -11,13 +11,19 @@ namespace winrt::PowerRenameUI_new::implementation
 {
     MainWindow::MainWindow()
     {
-        InitializeComponent();
         m_explorerItems = winrt::single_threaded_observable_vector<PowerRenameUI_new::ExplorerItem>();
         m_searchRegExShortcuts = winrt::single_threaded_observable_vector<PowerRenameUI_new::RegExShortcut>();
         m_fileRegExShortcuts = winrt::single_threaded_observable_vector<PowerRenameUI_new::RegExShortcut>();
 
-        m_explorerItems.Append(winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(L"Matches any character", 0));
-        m_explorerItems.Append(winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(L"22222", 1));
+        auto folder = winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(L"New Folder", 0);
+        folder.Children();
+        folder.Children().Append(winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(L"a.txt", 1));
+        folder.Children().Append(winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(L"b.txt", 1));
+        folder.Children().Append(winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(L"c.txt", 1));
+        m_explorerItems.Append(folder);
+        m_explorerItems.Append(winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(L"1.txt", 1));
+        m_explorerItems.Append(winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(L"2.txt", 1));
+        m_explorerItems.Append(winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(L"3.txt", 1));
 
         m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"\\.", L"Matches any character"));
         m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"\\d", L"Any digit, short for [0-9]"));
@@ -34,6 +40,7 @@ namespace winrt::PowerRenameUI_new::implementation
         m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$mm", L"Minutes"));
         m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$ss", L"Seconds"));
         m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$fff", L"Milliseconds"));
+        InitializeComponent();
     }
 
     winrt::Windows::Foundation::Collections::IObservableVector<winrt::PowerRenameUI_new::ExplorerItem> MainWindow::ExplorerItems()
@@ -50,4 +57,9 @@ namespace winrt::PowerRenameUI_new::implementation
     {
         return m_fileRegExShortcuts;
     }
+}
+
+void winrt::PowerRenameUI_new::implementation::MainWindow::Click_rename(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e)
+{
+    m_explorerItems.GetAt(0).Renamed(L"Test 'Renamed' binding");
 }
