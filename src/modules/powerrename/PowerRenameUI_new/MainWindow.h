@@ -5,6 +5,9 @@
 #include "winrt/Windows.UI.Xaml.Interop.h"
 #include "winrt/Windows.UI.Xaml.Controls.Primitives.h"
 #include "MainWindow.g.h"
+#include "RegExShortcut.h"
+#include "ExplorerItem.h"
+#include "ExplorerItemTemplateSelector.h"
 
 namespace winrt::PowerRenameUI_new::implementation
 {
@@ -12,10 +15,14 @@ namespace winrt::PowerRenameUI_new::implementation
     {
         MainWindow();
 
-        int32_t MyProperty();
-        void MyProperty(int32_t value);
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::ExplorerItem> ExplorerItems();
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::RegExShortcut> SearchRegExShortcuts();
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::RegExShortcut> FileRegExShortcuts();
 
-        void ClickHandler(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& args);
+    private:
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::ExplorerItem> m_explorerItems;
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::RegExShortcut> m_searchRegExShortcuts;
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::RegExShortcut> m_fileRegExShortcuts;
     };
 }
 

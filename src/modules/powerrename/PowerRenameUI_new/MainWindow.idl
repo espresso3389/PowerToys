@@ -1,9 +1,14 @@
+import "ExplorerItem.idl";
+import "RegExShortcut.idl";
+
 namespace PowerRenameUI_new
 {
     [default_interface]
     runtimeclass MainWindow : Windows.UI.Xaml.Controls.UserControl
     {
         MainWindow();
-        Int32 MyProperty;
+        Windows.Foundation.Collections.IObservableVector<ExplorerItem> ExplorerItems { get; };
+        Windows.Foundation.Collections.IObservableVector<RegExShortcut> SearchRegExShortcuts { get; };
+        Windows.Foundation.Collections.IObservableVector<RegExShortcut> FileRegExShortcuts { get; };
     }
 }

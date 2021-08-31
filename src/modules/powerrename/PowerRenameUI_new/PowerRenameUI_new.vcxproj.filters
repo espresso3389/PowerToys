@@ -8,15 +8,24 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="App.idl" />
+    <Midl Include="RegExShortcut.idl" />
+    <Midl Include="ExplorerItem.idl" />
+    <Midl Include="ExplorerItemTemplateSelector.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="RegExShortcut.cpp" />
+    <ClCompile Include="ExplorerItem.cpp" />
+    <ClCompile Include="ExplorerItemTemplateSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="app.base.h" />
+    <ClInclude Include="RegExShortcut.h" />
+    <ClInclude Include="ExplorerItem.h" />
+    <ClInclude Include="ExplorerItemTemplateSelector.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -38,6 +47,12 @@
       <Filter>Assets</Filter>
     </Image>
     <Image Include="Assets\LockScreenLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\file.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\folder.png">
       <Filter>Assets</Filter>
     </Image>
   </ItemGroup>

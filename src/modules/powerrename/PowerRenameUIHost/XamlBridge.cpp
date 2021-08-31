@@ -2,6 +2,7 @@
 
 #include "XamlBridge.h"
 #include "Resource.h"
+#include <exception>
 
 bool DesktopWindow::FilterMessage(const MSG* msg)
 {
@@ -101,12 +102,11 @@ bool DesktopWindow::NavigateFocus(MSG* msg)
 {
     if (const auto nextFocusedIsland = GetNextFocusedIsland(msg))
     {
-        //WINRT_VERIFY(!nextFocusedIsland.HasFocus());
         const auto previousFocusedWindow = ::GetFocus();
         RECT rect = {};
         WINRT_VERIFY(::GetWindowRect(previousFocusedWindow, &rect));
         const auto nativeIsland = nextFocusedIsland.as<IDesktopWindowXamlSourceNative>();
-        HWND islandWnd{};
+        HWND islandWnd = nullptr;
         winrt::check_hresult(nativeIsland->get_WindowHandle(&islandWnd));
         POINT pt = { rect.left, rect.top };
         SIZE size = { rect.right - rect.left, rect.bottom - rect.top };
@@ -136,19 +136,18 @@ bool DesktopWindow::NavigateFocus(MSG* msg)
 int DesktopWindow::MessageLoop(HACCEL accelerators)
 {
     MSG msg = {};
-    while (GetMessageW(&msg, nullptr, 0, 0))
+    while (GetMessage(&msg, nullptr, 0, 0))
     {
         const bool processedMessage = FilterMessage(&msg);
-        if (!processedMessage && !TranslateAcceleratorW(msg.hwnd, accelerators, &msg))
+        if (!processedMessage)// && !TranslateAcceleratorW(msg.hwnd, accelerators, &msg))
         {
             if (!NavigateFocus(&msg))
             {
                 TranslateMessage(&msg);
-                DispatchMessageW(&msg);
+                DispatchMessage(&msg);
             }
         }
     }
-
     return static_cast<int>(msg.wParam);
 }
 

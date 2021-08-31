@@ -108,6 +108,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="app.base.h" />
+    <ClInclude Include="ExplorerItem.h" />
+    <ClInclude Include="ExplorerItemTemplateSelector.h" />
     <ClInclude Include="MainWindow.h">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -116,6 +118,7 @@
     <ClInclude Include="App.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="RegExShortcut.h" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -131,6 +134,8 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Assets\file.png" />
+    <Image Include="Assets\folder.png" />
     <Image Include="Assets\LockScreenLogo.scale-200.png" />
     <Image Include="Assets\SplashScreen.scale-200.png" />
     <Image Include="Assets\Square150x150Logo.scale-200.png" />
@@ -140,6 +145,8 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ExplorerItem.cpp" />
+    <ClCompile Include="ExplorerItemTemplateSelector.cpp" />
     <ClCompile Include="MainWindow.cpp">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -151,15 +158,19 @@
       <DependentUpon>App.xaml</DependentUpon>
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="RegExShortcut.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="App.idl">
       <DependentUpon>App.xaml</DependentUpon>
     </Midl>
+    <Midl Include="ExplorerItem.idl" />
+    <Midl Include="ExplorerItemTemplateSelector.idl" />
     <Midl Include="MainWindow.idl">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
+    <Midl Include="RegExShortcut.idl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
