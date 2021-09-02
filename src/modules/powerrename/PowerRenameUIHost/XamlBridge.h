@@ -4,7 +4,10 @@
 #include <winrt/Windows.System.h>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
+#pragma push_macro("GetCurrentTime")
+#undef GetCurrentTime
 #include <winrt/Windows.UI.Xaml.Hosting.h>
+#pragma pop_macro("GetCurrentTime")
 #include <winrt/Windows.UI.Xaml.Markup.h>
 #include <windows.ui.xaml.hosting.desktopwindowxamlsource.h>
 #include <windowsx.h>

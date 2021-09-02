@@ -12,6 +12,8 @@
 #include <common/utils/resources.h>
 #include <common/utils/process_path.h>
 
+#include <PowerRenameUIHost/PowerRenameUIHost.h>
+
 extern HINSTANCE g_hInst;
 
 struct InvokeStruct
@@ -171,21 +173,13 @@ DWORD WINAPI CPowerRenameMenu::s_PowerRenameUIThreadProc(_In_ void* pData)
                 hr = spsrm->PutRenameItemFactory(spsrif);
                 if (SUCCEEDED(hr))
                 {
-                    // Create the rename UI instance and pass the rename manager
-                    CComPtr<IPowerRenameUI> spsrui;
-                    hr = CPowerRenameUI::s_CreateInstance(spsrm, dataSource, false, &spsrui);
 
-                    if (SUCCEEDED(hr))
+                    AppWindow::CreateUIHost(spsrm, dataSource);
+                    IDataObject* dummy;
+                    // If we're running on a local COM server, we need to decrement module refcount, which was previously incremented in CPowerRenameMenu::Invoke.
+                    if (SUCCEEDED(dataSource->QueryInterface(IID_IShellItemArray, reinterpret_cast<void**>(&dummy))))
                     {
-                        IDataObject* dummy;
-                        // If we're running on a local COM server, we need to decrement module refcount, which was previously incremented in CPowerRenameMenu::Invoke.
-                        if (SUCCEEDED(dataSource->QueryInterface(IID_IShellItemArray, reinterpret_cast<void**>(&dummy))))
-                        {
-                            ModuleRelease();
-                        }
-                        // Call blocks until we are done
-                        spsrui->Show(pInvokeData->hwndParent);
-                        spsrui->Close();
+                        ModuleRelease();
                     }
                 }
             }
