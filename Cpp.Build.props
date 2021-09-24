@@ -33,7 +33,7 @@
       <DisableAnalyzeExternal >true</DisableAnalyzeExternal>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <ConformanceMode>false</ConformanceMode>
-      <!-- <TreatWarningAsError>true</TreatWarningAsError> -->
+      <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -84,7 +84,6 @@
     <PlatformToolset Condition="'$(OverridePlatformToolset)'!='True'">v142</PlatformToolset>
     <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\obj\$(ProjectName)\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
-    <!-- <SpectreMitigation>Spectre</SpectreMitigation> -->
   </PropertyGroup>
 
   <!-- Debug/Release props -->
