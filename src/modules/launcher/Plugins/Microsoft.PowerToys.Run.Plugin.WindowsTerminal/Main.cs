@@ -20,10 +20,12 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal
     public class Main : IPlugin, IContextMenu, IPluginI18n, ISettingProvider
     {
         private const string OpenNewTab = nameof(OpenNewTab);
+        private const string ShowHiddenProfiles = nameof(ShowHiddenProfiles);
         private readonly ITerminalQuery _terminalQuery = new TerminalQuery();
         private PluginInitContext _context;
         private string _icoPath;
         private bool _openNewTab;
+        private bool _showHiddenProfiles;
 
         public string Name => Resources.plugin_name;
 
@@ -35,6 +37,13 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal
             {
                 Key = OpenNewTab,
                 DisplayLabel = Resources.open_new_tab,
+                Value = false,
+            },
+
+            new PluginAdditionalOption()
+            {
+                Key = ShowHiddenProfiles,
+                DisplayLabel = Resources.show_hidden_profiles,
                 Value = false,
             },
         };
@@ -55,6 +64,11 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal
 
             foreach (var profile in profiles)
             {
+                if (profile.Hidden && !_showHiddenProfiles)
+                {
+                    continue;
+                }
+
                 // Action keyword only or search query match
                 if ((!string.IsNullOrWhiteSpace(query.ActionKeyword) && string.IsNullOrWhiteSpace(search)) || StringMatcher.FuzzySearch(search, profile.Name).Success)
                 {
@@ -161,14 +175,16 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal
         public void UpdateSettings(PowerLauncherPluginSettings settings)
         {
             var openNewTab = false;
+            var showHiddenProfiles = false;
 
             if (settings != null && settings.AdditionalOptions != null)
             {
-                var optionConfirm = settings.AdditionalOptions.FirstOrDefault(x => x.Key == OpenNewTab);
-                openNewTab = optionConfirm?.Value ?? false;
+                openNewTab = settings.AdditionalOptions.FirstOrDefault(x => x.Key == OpenNewTab)?.Value ?? false;
+                showHiddenProfiles = settings.AdditionalOptions.FirstOrDefault(x => x.Key == ShowHiddenProfiles)?.Value ?? false;
             }
 
             _openNewTab = openNewTab;
+            _showHiddenProfiles = showHiddenProfiles;
         }
 
         private void UpdateIconPath(Theme theme)

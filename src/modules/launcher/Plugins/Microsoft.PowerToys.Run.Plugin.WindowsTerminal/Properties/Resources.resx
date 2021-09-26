@@ -132,4 +132,7 @@
   <data name="run_terminal_failed" xml:space="preserve">
     <value>Failed to open Windows Terminal</value>
   </data>
+  <data name="show_hidden_profiles" xml:space="preserve">
+    <value>Show hidden profiles</value>
+  </data>
 </root>

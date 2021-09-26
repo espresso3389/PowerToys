@@ -104,5 +104,14 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal.Properties {
                 return ResourceManager.GetString("run_terminal_failed", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show hidden profiles.
+        /// </summary>
+        internal static string show_hidden_profiles {
+            get {
+                return ResourceManager.GetString("show_hidden_profiles", resourceCulture);
+            }
+        }
     }
 }
