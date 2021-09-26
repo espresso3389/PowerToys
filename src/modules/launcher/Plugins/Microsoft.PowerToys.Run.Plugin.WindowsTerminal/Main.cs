@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ManagedCommon;
 using Microsoft.PowerToys.Run.Plugin.WindowsTerminal.Helpers;
 using Microsoft.PowerToys.Run.Plugin.WindowsTerminal.Properties;
 using Microsoft.PowerToys.Settings.UI.Library;
@@ -19,8 +20,9 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal
     public class Main : IPlugin, IContextMenu, IPluginI18n, ISettingProvider
     {
         private const string OpenNewTab = nameof(OpenNewTab);
-        private static PluginInitContext _context;
         private readonly ITerminalQuery _terminalQuery = new TerminalQuery();
+        private PluginInitContext _context;
+        private string _icoPath;
         private bool _openNewTab;
 
         public string Name => Resources.plugin_name;
@@ -40,6 +42,8 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal
         public void Init(PluginInitContext context)
         {
             _context = context;
+            _context.API.ThemeChanged += OnThemeChanged;
+            UpdateIconPath(_context.API.GetCurrentTheme());
         }
 
         public List<Result> Query(Query query)
@@ -58,6 +62,7 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal
                     {
                         Title = profile.Name,
                         SubTitle = profile.Terminal.DisplayName,
+                        IcoPath = _icoPath,
                         Action = _ =>
                         {
                             Launch(profile.Terminal.AppUserModelId, profile.Name);
@@ -164,6 +169,23 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal
             }
 
             _openNewTab = openNewTab;
+        }
+
+        private void UpdateIconPath(Theme theme)
+        {
+            if (theme == Theme.Light || theme == Theme.HighContrastWhite)
+            {
+                _icoPath = "Images/WindowsTerminal.light.png";
+            }
+            else
+            {
+                _icoPath = "Images/WindowsTerminal.dark.png";
+            }
+        }
+
+        private void OnThemeChanged(Theme currentTheme, Theme newTheme)
+        {
+            UpdateIconPath(newTheme);
         }
     }
 }
