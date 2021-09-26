@@ -1014,6 +1014,7 @@ ITemplate
 ITEMSTATEICONCLICK
 ITest
 ith
+ITerminal
 IThrottled
 IThumbnail
 ITrigger
