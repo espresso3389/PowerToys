@@ -8,7 +8,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
-using System.Text.Json;
 using Windows.Management.Deployment;
 
 namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal.Helpers
@@ -50,51 +49,11 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal.Helpers
                     continue;
                 }
 
-                var jsonText = File.ReadAllText(terminal.SettingsPath);
-
-                var options = new JsonDocumentOptions
-                {
-                    CommentHandling = JsonCommentHandling.Skip,
-                };
-
-                var json = JsonDocument.Parse(jsonText, options);
-
-                json.RootElement.TryGetProperty("profiles", out JsonElement profilesElement);
-                if (profilesElement.ValueKind != JsonValueKind.Object)
-                {
-                    continue;
-                }
-
-                profilesElement.TryGetProperty("list", out JsonElement profilesList);
-                if (profilesList.ValueKind != JsonValueKind.Array)
-                {
-                    continue;
-                }
-
-                foreach (var profile in profilesList.EnumerateArray())
-                {
-                    profiles.Add(ParseProfile(terminal, profile));
-                }
+                var settingsJson = File.ReadAllText(terminal.SettingsPath);
+                profiles.AddRange(TerminalHelper.ParseSettings(terminal, settingsJson));
             }
 
             return profiles.OrderBy(p => p.Name);
-        }
-
-        private static TerminalProfile ParseProfile(TerminalPackage terminal, JsonElement profileElement)
-        {
-            profileElement.TryGetProperty("name", out JsonElement nameElement);
-            var name = nameElement.ValueKind == JsonValueKind.String ? nameElement.GetString() : null;
-
-            profileElement.TryGetProperty("hidden", out JsonElement hiddenElement);
-            var hidden = (hiddenElement.ValueKind == JsonValueKind.False || hiddenElement.ValueKind == JsonValueKind.True) && hiddenElement.GetBoolean();
-
-            profileElement.TryGetProperty("guid", out JsonElement guidElement);
-            var guid = guidElement.ValueKind == JsonValueKind.String ? Guid.Parse(guidElement.GetString()) : null as Guid?;
-
-            profileElement.TryGetProperty("icon", out JsonElement iconElement);
-            var icon = iconElement.ValueKind == JsonValueKind.String ? iconElement.GetString() : null;
-
-            return new TerminalProfile(terminal, name, guid, icon, hidden);
         }
     }
 }

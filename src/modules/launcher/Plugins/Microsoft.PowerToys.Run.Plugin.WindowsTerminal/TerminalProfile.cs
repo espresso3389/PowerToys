@@ -14,16 +14,13 @@ namespace Microsoft.PowerToys.Run.Plugin.WindowsTerminal
 
         public Guid? Identifier { get; }
 
-        public string Icon { get; }
-
         public bool Hidden { get; }
 
-        public TerminalProfile(TerminalPackage terminal, string name, Guid? identifier, string icon, bool hidden)
+        public TerminalProfile(TerminalPackage terminal, string name, Guid? identifier, bool hidden)
         {
             Terminal = terminal;
             Name = name;
             Identifier = identifier;
-            Icon = icon;
             Hidden = hidden;
         }
     }

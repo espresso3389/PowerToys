@@ -370,6 +370,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests-PdfThumbnailProvi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.PowerToys.Run.Plugin.WindowsTerminal", "src\modules\launcher\Plugins\Microsoft.PowerToys.Run.Plugin.WindowsTerminal\Microsoft.PowerToys.Run.Plugin.WindowsTerminal.csproj", "{A2D583F0-B70C-4462-B1F0-8E81AFB7BA85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.PowerToys.Run.Plugin.WindowsTerminal.UnitTests", "src\modules\launcher\Plugins\Microsoft.PowerToys.Run.Plugin.WindowsTerminal.UnitTests\Microsoft.PowerToys.Run.Plugin.WindowsTerminal.UnitTests.csproj", "{4ED320BC-BA04-4D42-8D15-CBE62151F08B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -974,6 +976,14 @@ Global
 		{A2D583F0-B70C-4462-B1F0-8E81AFB7BA85}.Release|x64.ActiveCfg = Release|x64
 		{A2D583F0-B70C-4462-B1F0-8E81AFB7BA85}.Release|x64.Build.0 = Release|x64
 		{A2D583F0-B70C-4462-B1F0-8E81AFB7BA85}.Release|x86.ActiveCfg = Release|x64
+		{4ED320BC-BA04-4D42-8D15-CBE62151F08B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4ED320BC-BA04-4D42-8D15-CBE62151F08B}.Debug|x64.Build.0 = Debug|Any CPU
+		{4ED320BC-BA04-4D42-8D15-CBE62151F08B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4ED320BC-BA04-4D42-8D15-CBE62151F08B}.Debug|x86.Build.0 = Debug|Any CPU
+		{4ED320BC-BA04-4D42-8D15-CBE62151F08B}.Release|x64.ActiveCfg = Release|Any CPU
+		{4ED320BC-BA04-4D42-8D15-CBE62151F08B}.Release|x64.Build.0 = Release|Any CPU
+		{4ED320BC-BA04-4D42-8D15-CBE62151F08B}.Release|x86.ActiveCfg = Release|Any CPU
+		{4ED320BC-BA04-4D42-8D15-CBE62151F08B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1090,6 +1100,7 @@ Global
 		{11491FD8-F921-48BF-880C-7FEA185B80A1} = {2F305555-C296-497E-AC20-5FA1B237996A}
 		{F40C3397-1834-4530-B2D9-8F8B8456BCDF} = {2F305555-C296-497E-AC20-5FA1B237996A}
 		{A2D583F0-B70C-4462-B1F0-8E81AFB7BA85} = {4AFC9975-2456-4C70-94A4-84073C1CED93}
+		{4ED320BC-BA04-4D42-8D15-CBE62151F08B} = {4AFC9975-2456-4C70-94A4-84073C1CED93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3A2F9D1-7930-4EF4-A6FC-7EE0A99821D0}
