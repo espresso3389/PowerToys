@@ -112,7 +112,8 @@ private:
     void ValidateFlags(PowerRenameFlags flag);
     void UpdateFlag(PowerRenameFlags flag, UpdateFlagCommand command);
     void SetHandlers();
-    void ToggleItem();
+    void ToggleItem(int32_t id, bool checked);
+    void ToggleAll();
     void SwitchView();
     void Rename();
     HRESULT ReadSettings();

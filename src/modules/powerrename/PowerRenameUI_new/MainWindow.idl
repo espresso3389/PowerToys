@@ -3,6 +3,15 @@ import "RegExShortcut.idl";
 
 namespace PowerRenameUI_new
 {
+    runtimeclass UIUpdates : Windows.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        UIUpdates();
+        Boolean ShowAll;
+        Int32 ChangedExplorerItemId;
+        Boolean Checked;
+        void ToggleAll();
+    }
+
     [default_interface] runtimeclass MainWindow : Windows.UI.Xaml.Controls.UserControl
     {
         MainWindow();
@@ -31,6 +40,8 @@ namespace PowerRenameUI_new
         Windows.UI.Xaml.Controls.Button BtnRename();
         Windows.UI.Xaml.Controls.Button BtnSettings();
 
+        Windows.UI.Xaml.Controls.CheckBox ChckBoxSelectAll();
+
         Windows.UI.Xaml.Controls.Primitives.ToggleButton TglBtnUpperCase();
         Windows.UI.Xaml.Controls.Primitives.ToggleButton TglBtnLowerCase();
         Windows.UI.Xaml.Controls.Primitives.ToggleButton TglBtnTitleCase();
@@ -41,6 +52,6 @@ namespace PowerRenameUI_new
         void AppendSearchMRU(String value);
         void AppendReplaceMRU(String value);
 
-        ExplorerItem ChangedItem();
+        UIUpdates UIUpdatesItem();
     }
 }

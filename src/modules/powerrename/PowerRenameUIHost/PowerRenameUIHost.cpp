@@ -77,7 +77,6 @@ void AppWindow::CreateAndShowWindow()
     wcex.hIcon = LoadIconW(m_instance, MAKEINTRESOURCE(IDC_POWERRENAMEUIHOST));
     wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
     wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-    //wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_POWERRENAMEUIHOST);
     wcex.lpszClassName = c_WindowClass;
     wcex.hIconSm = LoadIconW(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
     RegisterClassExW(&wcex); // don't test result, handle error at CreateWindow
@@ -173,7 +172,6 @@ HRESULT AppWindow::CreateShellItemArrayFromPaths(
 
 void AppWindow::PopulateExplorerItems()
 {
-    auto explorerItems = m_mainUserControl.ExplorerItems();
     UINT count = 0;
     m_prManager->GetVisibleItemCount(&count);
 
@@ -364,15 +362,19 @@ void AppWindow::UpdateFlag(PowerRenameFlags flag, UpdateFlagCommand command)
 
 void AppWindow::SetHandlers()
 {
-    m_mainUserControl.ChangedItem().PropertyChanged([&](winrt::Windows::Foundation::IInspectable const& sender, Data::PropertyChangedEventArgs const& e) {
+    m_mainUserControl.UIUpdatesItem().PropertyChanged([&](winrt::Windows::Foundation::IInspectable const& sender, Data::PropertyChangedEventArgs const& e) {
         std::wstring property{ e.PropertyName() };
-        if (property.compare(L"Type") == 0)
+        if (property == L"ShowAll")
         {
             SwitchView();
         }
-        else if (property.compare(L"Checked") == 0 || property.compare(L"Original") == 0)
+        else if (property == L"ChangedItemId")
         {
-            ToggleItem();
+            ToggleItem(m_mainUserControl.UIUpdatesItem().ChangedExplorerItemId(), m_mainUserControl.UIUpdatesItem().Checked());
+        }
+        else if (property == L"ToggleAll")
+        {
+            ToggleAll();
         }
     });
 
@@ -516,13 +518,27 @@ void AppWindow::SetHandlers()
     });
 }
 
-void AppWindow::ToggleItem()
+void AppWindow::ToggleItem(int32_t id, bool checked)
 {
-    int32_t id = std::stoi(std::wstring{ m_mainUserControl.ChangedItem().Original() });
-    bool checked = m_mainUserControl.ChangedItem().Checked();
     CComPtr<IPowerRenameItem> spItem;
     m_prManager->GetItemById(id, &spItem);
     spItem->PutSelected(checked);
+    UpdateCounts();
+}
+
+void AppWindow::ToggleAll()
+{
+    UINT itemCount = 0;
+    m_prManager->GetItemCount(&itemCount);
+    bool selected = m_mainUserControl.ChckBoxSelectAll().IsChecked().GetBoolean();
+    for (UINT i = 0; i < itemCount; i++)
+    {
+        CComPtr<IPowerRenameItem> spItem;
+        if (SUCCEEDED(m_prManager->GetItemByIndex(i, &spItem)))
+        {
+            spItem->PutSelected(selected);
+        }
+    }
     UpdateCounts();
 }
 

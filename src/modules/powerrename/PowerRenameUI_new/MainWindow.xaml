@@ -167,12 +167,12 @@
                 <Button.Flyout>
                     <MenuBarItemFlyout Placement="Bottom">
                         <controls:RadioMenuFlyoutItem x:Name="btn_showAll"
-                                                      Click="btn_showAll_Click"
+                                                      Click="ShowAll"
                                                       Text="Show all files"
                                                       IsChecked="True"
                                                       GroupName="Filter"/>
                         <controls:RadioMenuFlyoutItem x:Name="btn_showRenamed"
-                                                      Click="btn_showRenamed_Click"
+                                                      Click="ShowRenamed"
                                                       Text="Only show files that will be renamed"
                                                       GroupName="Filter"/>
                     </MenuBarItemFlyout>

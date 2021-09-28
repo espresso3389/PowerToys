@@ -19,6 +19,7 @@
     <ClCompile Include="RegExShortcut.cpp" />
     <ClCompile Include="ExplorerItem.cpp" />
     <ClCompile Include="ExplorerItemTemplateSelector.cpp" />
+    <ClCompile Include="UIUpdates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="RegExShortcut.h" />
     <ClInclude Include="ExplorerItem.h" />
     <ClInclude Include="ExplorerItemTemplateSelector.h" />
+    <ClInclude Include="UIUpdates.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

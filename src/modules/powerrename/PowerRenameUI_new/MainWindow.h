@@ -44,7 +44,9 @@ namespace winrt::PowerRenameUI_new::implementation
         Windows::UI::Xaml::Controls::Button BtnRename();
         Windows::UI::Xaml::Controls::Button BtnSettings();
 
-        PowerRenameUI_new::ExplorerItem ChangedItem();
+        Windows::UI::Xaml::Controls::CheckBox ChckBoxSelectAll();
+
+        PowerRenameUI_new::UIUpdates UIUpdatesItem();
 
         void AddExplorerItem(int32_t id, hstring const& original, hstring const& renamed, int32_t type, int32_t parentId, bool checked);
         void UpdateExplorerItem(int32_t id, hstring const& newName);
@@ -53,10 +55,11 @@ namespace winrt::PowerRenameUI_new::implementation
 
         void Checked_ids(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
         void SelectAll(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
-        void btn_showAll_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
-        void btn_showRenamed_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
+        void ShowAll(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
+        void ShowRenamed(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
     private:
-        PowerRenameUI_new::ExplorerItem m_changedItem{ -1, L"nvm", L"", 0, false };
+        bool m_allSelected;
+        PowerRenameUI_new::UIUpdates m_uiUpdatesItem;
         PowerRenameUI_new::ExplorerItem FindById(int32_t id);
         PowerRenameUI_new::ExplorerItem FindById(PowerRenameUI_new::ExplorerItem& root, int32_t id);
         void ToggleAll(PowerRenameUI_new::ExplorerItem node, bool checked);

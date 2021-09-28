@@ -119,6 +119,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="RegExShortcut.h" />
+    <ClInclude Include="UIUpdates.h" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -159,6 +160,7 @@
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="RegExShortcut.cpp" />
+    <ClCompile Include="UIUpdates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="App.idl">

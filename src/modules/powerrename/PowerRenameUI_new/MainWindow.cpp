@@ -10,7 +10,8 @@ using namespace Windows::UI::Xaml;
 
 namespace winrt::PowerRenameUI_new::implementation
 {
-    MainWindow::MainWindow()
+    MainWindow::MainWindow() :
+        m_allSelected{ true }
     {
         m_searchMRU = winrt::single_threaded_observable_vector<hstring>();
         m_replaceMRU = winrt::single_threaded_observable_vector<hstring>();
@@ -142,9 +143,14 @@ namespace winrt::PowerRenameUI_new::implementation
         return btn_settings();
     }
 
-    PowerRenameUI_new::ExplorerItem MainWindow::ChangedItem()
+    Windows::UI::Xaml::Controls::CheckBox MainWindow::ChckBoxSelectAll()
     {
-        return m_changedItem;
+        return chckBox_selectAll();
+    }
+
+    PowerRenameUI_new::UIUpdates MainWindow::UIUpdatesItem()
+    {
+        return m_uiUpdatesItem;
     }
 
     void MainWindow::AddExplorerItem(int32_t id, hstring const& original, hstring const& renamed, int32_t type, int32_t parentId, bool checked)
@@ -220,41 +226,50 @@ namespace winrt::PowerRenameUI_new::implementation
             }
         }
     }
-}
 
-void winrt::PowerRenameUI_new::implementation::MainWindow::Checked_ids(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const&)
-{
-    auto checkbox = sender.as<Windows::UI::Xaml::Controls::CheckBox>();
-    // TODO(stefan): Ugly, make it nicer!
-    m_changedItem.Original(checkbox.Name());
-    m_changedItem.Checked(checkbox.IsChecked().GetBoolean());
-}
-
-void winrt::PowerRenameUI_new::implementation::MainWindow::SelectAll(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::RoutedEventArgs const&)
-{
-    auto fakeRoot = winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(0, L"Fake", L"", 0, false);
-    fakeRoot.Children(m_explorerItems);
-    ToggleAll(fakeRoot, chckBox_selectAll().IsChecked().GetBoolean());
-}
-
-void winrt::PowerRenameUI_new::implementation::MainWindow::btn_showAll_Click(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::RoutedEventArgs const&)
-{
-    btn_showAll().IsChecked(true);
-    btn_showRenamed().IsChecked(false);
-    if (m_changedItem.Type() != 0)
+    void MainWindow::Checked_ids(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const&)
     {
-        m_explorerItems.Clear();
-        m_changedItem.Type(0);    
+        auto checkbox = sender.as<Windows::UI::Xaml::Controls::CheckBox>();
+        auto id = std::stoi(std::wstring{ checkbox.Name() });
+        auto item = FindById(id);
+        if (checkbox.IsChecked().GetBoolean() != item.Checked())
+        {
+            m_uiUpdatesItem.Checked(checkbox.IsChecked().GetBoolean());
+            m_uiUpdatesItem.ChangedExplorerItemId(id);
+        }
     }
-}
 
-void winrt::PowerRenameUI_new::implementation::MainWindow::btn_showRenamed_Click(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::RoutedEventArgs const&)
-{
-    btn_showRenamed().IsChecked(true);
-    btn_showAll().IsChecked(false);
-    if (m_changedItem.Type() != 1)
+    void MainWindow::SelectAll(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::RoutedEventArgs const&)
     {
-        m_explorerItems.Clear();
-        m_changedItem.Type(1);
+        if (chckBox_selectAll().IsChecked().GetBoolean() != m_allSelected)
+        {
+            auto fakeRoot = winrt::make<PowerRenameUI_new::implementation::ExplorerItem>(0, L"Fake", L"", 0, false);
+            fakeRoot.Children(m_explorerItems);
+            ToggleAll(fakeRoot, chckBox_selectAll().IsChecked().GetBoolean());
+            m_uiUpdatesItem.ToggleAll();
+            m_allSelected = !m_allSelected;
+        }
+    }
+
+    void MainWindow::ShowAll(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::RoutedEventArgs const&)
+    {
+        btn_showAll().IsChecked(true);
+        btn_showRenamed().IsChecked(false);
+        if (!m_uiUpdatesItem.ShowAll())
+        {
+            m_explorerItems.Clear();
+            m_uiUpdatesItem.ShowAll(true);
+        }
+    }
+
+    void MainWindow::ShowRenamed(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::RoutedEventArgs const&)
+    {
+        btn_showRenamed().IsChecked(true);
+        btn_showAll().IsChecked(false);
+        if (m_uiUpdatesItem.ShowAll())
+        {
+            m_explorerItems.Clear();
+            m_uiUpdatesItem.ShowAll(false);
+        }
     }
 }
