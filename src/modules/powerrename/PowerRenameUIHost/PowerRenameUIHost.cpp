@@ -512,6 +512,7 @@ void AppWindow::SetHandlers()
         Rename();
     });
 
+    // BtnSettings
     m_mainUserControl.BtnSettings().Click([&](winrt::Windows::Foundation::IInspectable const& sender, RoutedEventArgs const&)
     {
         OpenSettingsApp();
@@ -627,7 +628,7 @@ HRESULT AppWindow::OpenSettingsApp() {
     std::wstring path = get_module_folderpath(g_hostHInst);
     path += L"\\..\\..\\PowerToys.exe";
 
-    std::wstring openSettings = L"--open-settings";
+    std::wstring openSettings = L"--open-settings=PowerRename";
 
     CString commandLine;
     commandLine.Format(_T("\"%s\""), path.c_str());
