@@ -8,7 +8,7 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="App.idl" />
-    <Midl Include="RegExShortcut.idl" />
+    <Midl Include="PatternSnippet.idl" />
     <Midl Include="ExplorerItem.idl" />
     <Midl Include="ExplorerItemTemplateSelector.idl" />
   </ItemGroup>
@@ -16,7 +16,7 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="RegExShortcut.cpp" />
+    <ClCompile Include="PatternSnippet.cpp" />
     <ClCompile Include="ExplorerItem.cpp" />
     <ClCompile Include="ExplorerItemTemplateSelector.cpp" />
     <ClCompile Include="UIUpdates.cpp" />
@@ -24,7 +24,7 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="app.base.h" />
-    <ClInclude Include="RegExShortcut.h" />
+    <ClInclude Include="PatternSnippet.h" />
     <ClInclude Include="ExplorerItem.h" />
     <ClInclude Include="ExplorerItemTemplateSelector.h" />
     <ClInclude Include="UIUpdates.h" />

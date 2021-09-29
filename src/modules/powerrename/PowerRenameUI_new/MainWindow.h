@@ -5,7 +5,7 @@
 #include "winrt/Windows.UI.Xaml.Interop.h"
 #include "winrt/Windows.UI.Xaml.Controls.Primitives.h"
 #include "MainWindow.g.h"
-#include "RegExShortcut.h"
+#include "PatternSnippet.h"
 #include "ExplorerItem.h"
 #include "ExplorerItemTemplateSelector.h"
 
@@ -18,8 +18,8 @@ namespace winrt::PowerRenameUI_new::implementation
         Windows::Foundation::Collections::IObservableVector<hstring> SearchMRU();
         Windows::Foundation::Collections::IObservableVector<hstring> ReplaceMRU();
         winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::ExplorerItem> ExplorerItems();
-        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::RegExShortcut> SearchRegExShortcuts();
-        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::RegExShortcut> FileRegExShortcuts();
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::PatternSnippet> SearchRegExShortcuts();
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::PatternSnippet> DateTimeShortcuts();
 
         Windows::UI::Xaml::Controls::AutoSuggestBox AutoSuggestBoxSearch();
         Windows::UI::Xaml::Controls::AutoSuggestBox AutoSuggestBoxReplace();
@@ -67,8 +67,12 @@ namespace winrt::PowerRenameUI_new::implementation
         winrt::Windows::Foundation::Collections::IObservableVector<hstring> m_searchMRU;
         winrt::Windows::Foundation::Collections::IObservableVector<hstring> m_replaceMRU;
         winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::ExplorerItem> m_explorerItems;
-        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::RegExShortcut> m_searchRegExShortcuts;
-        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::RegExShortcut> m_fileRegExShortcuts;
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::PatternSnippet> m_searchRegExShortcuts;
+        winrt::Windows::Foundation::Collections::IObservableVector<PowerRenameUI_new::PatternSnippet> m_dateTimeShortcuts;
+
+    public:
+        void RegExItemClick(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::Controls::ItemClickEventArgs const& e);
+        void DateTimeItemClick(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::Controls::ItemClickEventArgs const& e);
     };
 }
 

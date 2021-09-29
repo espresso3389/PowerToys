@@ -1,20 +1,20 @@
 #include "pch.h"
-#include "RegExShortcut.h"
-#include "RegExShortcut.g.cpp"
+#include "PatternSnippet.h"
+#include "PatternSnippet.g.cpp"
 
 namespace winrt::PowerRenameUI_new::implementation
 {
-    RegExShortcut::RegExShortcut(hstring const& code, hstring const& description) :
+    PatternSnippet::PatternSnippet(hstring const& code, hstring const& description) :
         m_code{ code }, m_description{ description }
     {
     }
 
-    hstring RegExShortcut::Code()
+    hstring PatternSnippet::Code()
     {
         return m_code;
     }
 
-    void RegExShortcut::Code(hstring const& value)
+    void PatternSnippet::Code(hstring const& value)
     {
         if (m_code != value)
         {
@@ -23,12 +23,12 @@ namespace winrt::PowerRenameUI_new::implementation
         }
     }
 
-    hstring RegExShortcut::Description()
+    hstring PatternSnippet::Description()
     {
         return m_description;
     }
 
-    void RegExShortcut::Description(hstring const& value)
+    void PatternSnippet::Description(hstring const& value)
     {
         if (m_description != value)
         {
@@ -37,12 +37,12 @@ namespace winrt::PowerRenameUI_new::implementation
         }
     }
 
-    winrt::event_token RegExShortcut::PropertyChanged(winrt::Windows::UI::Xaml::Data::PropertyChangedEventHandler const& handler)
+    winrt::event_token PatternSnippet::PropertyChanged(winrt::Windows::UI::Xaml::Data::PropertyChangedEventHandler const& handler)
     {
         return m_propertyChanged.add(handler);
     }
 
-    void RegExShortcut::PropertyChanged(winrt::event_token const& token) noexcept
+    void PatternSnippet::PropertyChanged(winrt::event_token const& token) noexcept
     {
         m_propertyChanged.remove(token);
     }

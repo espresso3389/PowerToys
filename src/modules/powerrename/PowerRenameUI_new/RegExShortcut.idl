@@ -1,9 +1,0 @@
-namespace PowerRenameUI_new
-{
-    runtimeclass RegExShortcut : Windows.UI.Xaml.Data.INotifyPropertyChanged
-    {
-        RegExShortcut(String code, String description);
-        String Code;
-        String Description;
-    }
-}

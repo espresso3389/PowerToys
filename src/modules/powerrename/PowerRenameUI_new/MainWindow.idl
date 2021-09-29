@@ -1,5 +1,5 @@
 import "ExplorerItem.idl";
-import "RegExShortcut.idl";
+import "PatternSnippet.idl";
 
 namespace PowerRenameUI_new
 {
@@ -20,8 +20,8 @@ namespace PowerRenameUI_new
         Windows.Foundation.Collections.IObservableVector<String> ReplaceMRU { get; };
 
         Windows.Foundation.Collections.IObservableVector<ExplorerItem> ExplorerItems { get; };
-        Windows.Foundation.Collections.IObservableVector<RegExShortcut> SearchRegExShortcuts { get; };
-        Windows.Foundation.Collections.IObservableVector<RegExShortcut> FileRegExShortcuts { get; };
+        Windows.Foundation.Collections.IObservableVector<PatternSnippet> SearchRegExShortcuts { get; };
+        Windows.Foundation.Collections.IObservableVector<PatternSnippet> DateTimeShortcuts { get; };
 
         Windows.UI.Xaml.Controls.AutoSuggestBox AutoSuggestBoxSearch();
         Windows.UI.Xaml.Controls.AutoSuggestBox AutoSuggestBoxReplace();

@@ -118,7 +118,7 @@
     <ClInclude Include="App.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
-    <ClInclude Include="RegExShortcut.h" />
+    <ClInclude Include="PatternSnippet.h" />
     <ClInclude Include="UIUpdates.h" />
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +159,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="RegExShortcut.cpp" />
+    <ClCompile Include="PatternSnippet.cpp" />
     <ClCompile Include="UIUpdates.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,7 +172,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
-    <Midl Include="RegExShortcut.idl" />
+    <Midl Include="PatternSnippet.idl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

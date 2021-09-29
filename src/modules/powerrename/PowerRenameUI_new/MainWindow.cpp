@@ -17,24 +17,38 @@ namespace winrt::PowerRenameUI_new::implementation
         m_replaceMRU = winrt::single_threaded_observable_vector<hstring>();
 
         m_explorerItems = winrt::single_threaded_observable_vector<PowerRenameUI_new::ExplorerItem>();
-        m_searchRegExShortcuts = winrt::single_threaded_observable_vector<PowerRenameUI_new::RegExShortcut>();
-        m_fileRegExShortcuts = winrt::single_threaded_observable_vector<PowerRenameUI_new::RegExShortcut>();
 
-        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"\\.", L"Matches any character"));
-        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"\\d", L"Any digit, short for [0-9]"));
-        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"\\D", L"A non-digit, short for [^0-9]"));
-        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"\\w", L"A non-whitespace character, short for [^\\s]"));
-        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"\\S", L"A word character, short for [a-zA-Z_0-9]"));
-        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"\\S+", L"Several non-whitespace characters"));
-        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"\\b", L"Matches a word boundary where a word character is [a-zA-Z0-9_]."));
+        m_searchRegExShortcuts = winrt::single_threaded_observable_vector<PowerRenameUI_new::PatternSnippet>();
+        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"\\.", L"Matches any character"));
+        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"\\d", L"Any digit, short for [0-9]"));
+        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"\\D", L"A non-digit, short for [^0-9]"));
+        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"\\w", L"A non-whitespace character, short for [^\\s]"));
+        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"\\S", L"A word character, short for [a-zA-Z_0-9]"));
+        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"\\S+", L"Several non-whitespace characters"));
+        m_searchRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"\\b", L"Matches a word boundary where a word character is [a-zA-Z0-9_]."));
 
-        m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$YYYY", L"Year"));
-        m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$MM", L"Month"));
-        m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$DD", L"Day"));
-        m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$hh", L"Hours"));
-        m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$mm", L"Minutes"));
-        m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$ss", L"Seconds"));
-        m_fileRegExShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::RegExShortcut>(L"$fff", L"Milliseconds"));
+        m_dateTimeShortcuts = winrt::single_threaded_observable_vector<PowerRenameUI_new::PatternSnippet>();
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$YYYY", L"Year represented by a full four or five digits, depending on the calendar used"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$YY", L"Year represented only by the last two digits. A leading zero is added for single-digit years"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$Y", L"Year represented only by the last digit."));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$MMMM", L"Name of the month"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$MMM", L"Abbreviated name of the month"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$MM", L"Month as digits with leading zeros for single-digit months"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$M", L"Month as digits without leading zeros for single-digit months"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$DDDD", L"Name of the day of the week"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$DDD", L"Abbreviated name of the day of the week"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$DD", L"Day of the month as digits with leading zeros for single-digit days"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$D", L"Day of the month as digits without leading zeros for single-digit days"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$hh", L"Hours with leading zeros for single-digit hours"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$h", L"Hours without leading zeros for single-digit hours"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$mm", L"Minutes with leading zeros for single-digit minutes"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$m", L"Minutes without leading zeros for single-digit minutes"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$ss", L"Seconds with leading zeros for single-digit seconds"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$s", L"Seconds without leading zeros for single-digit seconds"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$fff", L"Milliseconds represented by full three digits"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$ff", L"Milliseconds represented only by the first two digit"));
+        m_dateTimeShortcuts.Append(winrt::make<PowerRenameUI_new::implementation::PatternSnippet>(L"$f", L"Milliseconds represented only by the first digit"));
+
         InitializeComponent();
     }
 
@@ -53,14 +67,14 @@ namespace winrt::PowerRenameUI_new::implementation
         return m_explorerItems;
     }
 
-    winrt::Windows::Foundation::Collections::IObservableVector<winrt::PowerRenameUI_new::RegExShortcut> MainWindow::SearchRegExShortcuts()
+    winrt::Windows::Foundation::Collections::IObservableVector<winrt::PowerRenameUI_new::PatternSnippet> MainWindow::SearchRegExShortcuts()
     {
         return m_searchRegExShortcuts;
     }
 
-    winrt::Windows::Foundation::Collections::IObservableVector<winrt::PowerRenameUI_new::RegExShortcut> MainWindow::FileRegExShortcuts()
+    winrt::Windows::Foundation::Collections::IObservableVector<winrt::PowerRenameUI_new::PatternSnippet> MainWindow::DateTimeShortcuts()
     {
-        return m_fileRegExShortcuts;
+        return m_dateTimeShortcuts;
     }
 
     Windows::UI::Xaml::Controls::AutoSuggestBox MainWindow::AutoSuggestBoxSearch()
@@ -271,5 +285,19 @@ namespace winrt::PowerRenameUI_new::implementation
             m_explorerItems.Clear();
             m_uiUpdatesItem.ShowAll(false);
         }
+    }
+
+    void MainWindow::RegExItemClick(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::Controls::ItemClickEventArgs const& e)
+    {
+        auto s = e.ClickedItem().try_as<PatternSnippet>();
+        RegExFlyout().Hide();
+        textBox_search().Text(textBox_search().Text() + s->Code());
+    }
+
+    void MainWindow::DateTimeItemClick(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::Controls::ItemClickEventArgs const& e)
+    {
+        auto s = e.ClickedItem().try_as<PatternSnippet>();
+        DateTimeFlyout().Hide();
+        textBox_replace().Text(textBox_replace().Text() + s->Code());
     }
 }

@@ -1,13 +1,13 @@
 #pragma once
-#include "RegExShortcut.g.h"
+#include "PatternSnippet.g.h"
 
 namespace winrt::PowerRenameUI_new::implementation
 {
-    struct RegExShortcut : RegExShortcutT<RegExShortcut>
+    struct PatternSnippet : PatternSnippetT<PatternSnippet>
     {
-        RegExShortcut() = delete;
+        PatternSnippet() = delete;
 
-        RegExShortcut(hstring const& code, hstring const& description);
+        PatternSnippet(hstring const& code, hstring const& description);
         hstring Code();
         void Code(hstring const& value);
         hstring Description();
@@ -23,7 +23,7 @@ namespace winrt::PowerRenameUI_new::implementation
 }
 namespace winrt::PowerRenameUI_new::factory_implementation
 {
-    struct RegExShortcut : RegExShortcutT<RegExShortcut, implementation::RegExShortcut>
+    struct PatternSnippet : PatternSnippetT<PatternSnippet, implementation::PatternSnippet>
     {
     };
 }
