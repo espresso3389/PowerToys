@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lib/PowerRenameInterfaces.h>
+#include "PowerRenameInterfaces.h"
 
 #include <string>
 

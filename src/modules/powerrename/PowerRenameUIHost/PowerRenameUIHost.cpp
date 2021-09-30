@@ -570,7 +570,6 @@ HRESULT AppWindow::ReadSettings()
     if (CSettingsInstance().GetPersistState())
     {
         flags = CSettingsInstance().GetFlags();
-        m_prManager->PutFlags(flags);
 
         m_mainUserControl.AutoSuggestBoxSearch().Text(CSettingsInstance().GetSearchText().c_str());
         m_mainUserControl.AutoSuggestBoxReplace().Text(CSettingsInstance().GetReplaceText().c_str());
@@ -580,6 +579,7 @@ HRESULT AppWindow::ReadSettings()
         m_prManager->GetFlags(&flags);
     }
 
+    m_prManager->PutFlags(flags);
     SetCheckboxesFromFlags(flags);
 
     return S_OK;
